@@ -228,7 +228,7 @@
                   <th>Part Number</th>
                   <th>Purchase Order</th>
                   <th>Quantity</th>
-                  <th>Unity Price</th>
+                  <th>Unit Price</th>
                   <th>Stock</th>
                 </tr>
                 </thead>
@@ -238,7 +238,7 @@
                   <th>Part Number</th>
                   <th>Purchase Order</th>
                   <th>Quantity</th>
-                  <th>Unity Price</th>
+                  <th>Unit Price</th>
                   <th>Stock</th>
                 </tr>
                 </tfoot>

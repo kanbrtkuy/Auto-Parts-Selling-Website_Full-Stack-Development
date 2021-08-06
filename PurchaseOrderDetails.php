@@ -65,7 +65,7 @@
       <td>${r["Line Number"]}</td>
       <td>${r["Part Number"]}</td>
       <td>${r.Quantity} </td>
-      <td>${r.Subtotal}</td>
+      <td>${r.Subtotal * r.Quantity}</td>
       </tr>`;
     }
     // Setting innerHTML as tab variable
