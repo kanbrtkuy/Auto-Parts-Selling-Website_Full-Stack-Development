@@ -257,6 +257,11 @@
             var index = e.options[e.selectedIndex].index;
             var idName2 = "part-quantity-new" + i.toString();
             var entered = document.getElementById(idName2).value;
+            if(entered <= 0 || isNaN(entered)){
+                alert("Inappropriate quantity; please try again");
+                location.replace("ClientUserIndex.php");
+                return;
+            }
             items = items + "{\"part\":" + index + "," + "\"qty\":" + entered + "}";
             if ( (i+1) <= childDivs.length) {
                 items = items + ",";
