@@ -35,6 +35,7 @@ function parts_011(){
 	if(isset($result)){
 		$json = json_encode($result);
 	}
+	$conn -> close();
 	return $json;
 }
 
@@ -59,6 +60,7 @@ function poAll_011($cus_id){
 	if(isset($result)){
 		$json = json_encode($result);
 	}
+	$conn -> close();
 	return $json;
 }
 
@@ -83,6 +85,7 @@ function po_011($po_id){
 	if(isset($result)){
 		$json = json_encode($result);
 	}
+	$conn -> close();
 	return $json;
 }
 
@@ -137,6 +140,7 @@ function newOrder_011($payload){
 	}
 	$result = "{Rows: 0}";
     $json = json_encode($result);
+    $conn -> close();
     return $json;
 
 }
@@ -155,6 +159,7 @@ function cancelOrder_011($payload){
 	$handle -> execute();
 	$result = "{\"Rows\": " . $conn->affected_rows . "}";
     $json = json_encode($result);
+    $conn -> close();
     return $json;
 }
 

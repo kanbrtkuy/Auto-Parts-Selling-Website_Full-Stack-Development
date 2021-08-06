@@ -35,6 +35,7 @@ function partsAll_011(){
     if(isset($result)){
         $json = json_encode($result);
     }
+    $conn -> close();
     return $json;
 }
 
@@ -59,6 +60,7 @@ function parts_011($partNo){
     if(isset($result)){
         $json = json_encode($result);
     }
+    $conn -> close();
     return $json;
 }
 
@@ -80,6 +82,7 @@ function clientsAll_011(){
     if(isset($result)){
         $json = json_encode($result);
     }
+    $conn -> close();
     return $json;
 }
 
@@ -104,6 +107,7 @@ function clients_011($client_id){
     if(isset($result)){
         $json = json_encode($result);
     }
+    $conn -> close();
     return $json;
 }
 
@@ -125,6 +129,7 @@ function poAll_011(){
     if(isset($result)){
         $json = json_encode($result);
     }
+    $conn -> close();
     return $json;
 }
 
@@ -149,6 +154,7 @@ function pof_011($po_id){
     if(isset($result)){
         $json = json_encode($result);
     }
+    $conn -> close();
     return $json;
 }
 
@@ -173,6 +179,7 @@ function po_011($po_id){
     if(isset($result)){
         $json = json_encode($result);
     }
+    $conn -> close();
     return $json;
 }
 
@@ -185,11 +192,36 @@ function poSt_011($payload){
     $po_id = $payload['id'];
     $po_st = $payload['status'];
     $stmt = "UPDATE PO_011 SET status_011 = ? WHERE poNo_011 = ?";
-    $handle=$conn->prepare($stmt);
+    $handle = $conn->prepare($stmt);
     $handle -> bind_param('si',$po_st,$po_id);
     $handle -> execute();
+
+    $updater1 = "UPDATE PO_Lines_011 SET status_011 = ? WHERE poNo_011 = ?";
+    $handle1 = $conn->prepare($updater1);
+    $handle1 -> bind_param('si',$po_st,$po_id);
+    $handle1 -> execute();
+
     $result = "{\"Rows\": " . $conn->affected_rows . "}";
+    /*
+    if($po_st == "confirmed"){
+        $helper1 = "SELECT LineNO_011 FROM PO_Lines_011 WHERE poNo_011 = ?";
+        $handle1 = $conn->prepare($helper1);
+        $handle1 -> bind_param('i',$po_id);
+        $handle1 -> execute();
+        $payload1 = $handle1->get_result();
+        if ($payload1->num_rows > 0){
+            while($rows1 = $payload1->fetch_assoc()){
+                $result .= $rows1['LineNO_011'];
+                $updater1 = "UPDATE PO_Lines_011 SET status_011 = ? WHERE LineNO_011 = ?";
+                $handle2 -> $conn->prepare($updater1);
+                $handle2 -> bind_param('si',$po_st,$rows1['LineNO_011']);
+                $handle2 -> execute();
+            }           
+        }
+    }
+    */
     $json = json_encode($result);
+    $conn -> close();
     return $json;
 }
 
@@ -240,6 +272,7 @@ function updateParts_011($payload){
     $handle -> execute();
     $result = "{\"Rows\": " . $conn->affected_rows . "}";
     $json = json_encode($result);
+    $conn -> close();
     return $json;
 }
 
@@ -290,6 +323,7 @@ function updateClient_011($payload){
     $handle -> execute();
     $result = "{\"Rows\": " . $conn->affected_rows . "}";
     $json = json_encode($result);
+    $conn -> close();
     return $json;
 }
 ?>

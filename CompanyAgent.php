@@ -38,6 +38,7 @@
 <script>
   // api url
   const api_url = "https://web.cs.dal.ca/~zhaohe/CompanyAgentService/POG11";
+  const api_url_parts = "https://web.cs.dal.ca/~zhaohe/CompanyAgentService/PartsG11";
 
   // Defining async function
   async function getapi(url) {
@@ -74,6 +75,36 @@
     }
     // Setting innerHTML as tab variable
     document.getElementById("ourTable").innerHTML = tab;
+  }
+
+  async function getapi2(url) {
+
+    // Storing response
+    const response = await fetch(url);
+
+    // Storing data in form of JSON
+    var data = await response.json();
+    console.log(data);
+    show2(data);
+  }
+
+  getapi2(api_url_parts);
+
+  function show2(data) {
+    let tab =``;
+
+    // Loop to access all rows
+    for (let r of data) {
+      tab += `<tr>
+      <td>${r.PartNumber}</td>
+      <td>${r.Name}</td>
+      <td>${r.Description}</td>
+      <td>${r.CurrentPrice}</td>
+      <td>${r.Qty}</td>
+      </tr>`;
+    }
+    // Setting innerHTML as tab variable
+    document.getElementById("ourTable2").innerHTML = tab;
   }
 </script>
 
@@ -163,8 +194,48 @@
         <form name = "eijiushiwaner" method="POST" action="ChangeStatus.php">
           <label for="PO">Change Purchase Order Status:</label>
           <input type="text" name="PO">
-          <input type="submit" value="Submit">
+          <input class="btn btn-primary" type="submit" value="Submit">
         </form>
+
+        <br><br>
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Parts Table</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                  <tr>
+                    <th>Part Number</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Current Price</th>
+                    <th>Quantity</th>
+                  </tr>
+                  </thead>
+                  <tfoot>
+                  <tr>
+                    <th>Part Number</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Current Price</th>
+                    <th>Quantity</th>
+                  </tr>
+                  </tfoot>
+                  <tbody id="ourTable2">
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <form name = "eijiushiwaner2" method="POST" action="EditPart.php">
+            <label for="Part">Edit Part Information (Enter the part number):</label>
+            <input type="text" name="Part">
+            <input class="btn btn-primary" type="submit" value="Submit">
+          </form>
+        </div>
       </div>
       <!-- /.container-fluid -->
 

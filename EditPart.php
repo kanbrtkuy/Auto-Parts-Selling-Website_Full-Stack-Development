@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Client User</title>
+  <title>Edit Part Information</title>
 
   <!-- Custom fonts for this template -->
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -30,17 +30,28 @@
 
   <!-- Custom styles for this page -->
   <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+  <style>
+    .edit-section {
+      margin-left: 20px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+  </style>
 
 </head>
 
 <body id="page-top">
 
 <script>
+  var partNumber = ``;
+  var partName = ``;
+  var partDesc = ``;
+  var partPrice = ``;
+  var partQty = ``;
   window.onload = function(){
+  var partId= document.getElementById('part_id').innerHTML;
   // api url
-  var cusId = document.getElementById("cus_id").innerHTML;
-  const api_url = "https://web.cs.dal.ca/~zhaohe/ClientService/AllPOG11/" + cusId;
-  console.log(api_url);
+  const api_url = "https://web.cs.dal.ca/~zhaohe/CompanyAgentService/PartsG11/" + partId;
 
   // Defining async function
   async function getapi(url) {
@@ -53,29 +64,22 @@
     console.log(data);
     show(data);
   }
+
   // Calling that async function
   getapi(api_url);
 
   function show(data) {
-    let tab =``;
 
-    // Loop to access all rows
-    for (let r of data) {
-      let status = "";
-      if (r.Status == "processing") {
-        status = "placed";
-      }
-      else if (r.Status == "confirmed") {
-        status = "filled";
-      }
-      tab += `<tr>
-      <td>${r.Date} </td>
-      <td>${r["PO Number"]}</td>
-      <td>${status}</td>
-      </tr>`;
-    }
-    // Setting innerHTML as tab variable
-    document.getElementById("ourTable").innerHTML = tab;
+    partNumber = data[0].PartNumber;
+    document.getElementById("partNumber").innerHTML = partNumber;
+    partName = data[0].Name;
+    document.getElementById("partName").innerHTML = partName;
+    partDesc = data[0].Description;
+    document.getElementById("partDesc").defaultValue = partDesc;
+    partPrice = data[0].CurrentPrice;
+    document.getElementById("partPrice").defaultValue = partPrice;
+    partQty = data[0].Qty;
+    document.getElementById("partQty").defaultValue = partQty;
   }
 }
 </script>
@@ -87,19 +91,20 @@
   <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="ClientUserIndex.php">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
       <div class="sidebar-brand-icon rotate-n-15">
         <i class="fas fa-laugh-wink"></i>
       </div>
-      <div class="sidebar-brand-text mx-3">Client Page</div>
+      <div class="sidebar-brand-text mx-3">Agent Index</div>
     </a>
+
 
 
     <!-- modify parts -->
     <hr class="sidebar-divider my-0">
     <li class="nav-item">
-      <a class="nav-link" href="AddPurchaseOrder.php">
-        <span style="font-size: 20px; color: white">New Purchase Order</span></a>
+      <a class="nav-link" href="CompanyAgent.php">
+        <span style="font-size: 20px; color: white">Back</span></a>
     </li>
 
     <li class="nav-item">
@@ -107,7 +112,6 @@
         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
         <span style="font-size: 20px; color: white">Logout</span></a>
     </li>
-
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
@@ -129,50 +133,39 @@
 
       <!-- Begin Page Content -->
       <div class="container-fluid">
-        <p style="display: none;" id="cus_id"><?php echo $_SESSION['cus_id']; ?></p>
+        <p style="display: none;" id="part_id"><?php echo $_POST['Part']; ?></p>
 
-        <!-- DataTales Example -->
-
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">Edit Part Information</h1>
+        <p class="mb-4">Please Edit Part Information Here</p>
 
         <div class="card shadow mb-4">
           <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Purchase Order Table</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Edit Part Information</h6>
           </div>
-          <div class="card-body">
-            <div class="table-responsive">
-              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>PO Number</th>
-                  <th>Status</th>
-                </tr>
-                </thead>
-                <tfoot>
-                <tr>
-                  <th>Date</th>
-                  <th>PO Number</th>
-                  <th>Status</th>
-                </tr>
-                </tfoot>
-                <tbody id="ourTable">
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <div class="edit-section">Part Number: <div id="partNumber" style="display:inline; margin-left: 10px;"></div> </div>
+          <div class="edit-section">Name: <div id="partName" style="display:inline; margin-left: 60px;"></div> </div>
+          <div class="edit-section"><label>Description: </label> <input type="text" id="partDesc" style="margin-left: 22px;"> </div>
+          <div class="edit-section"><label>Current Price: </label> <input type="text" id="partPrice" style="margin-left: 10px;"> </div>
+          <div class="edit-section"><label>Quantity: </label> <input type="text" id="partQty" style="margin-left: 41px;"> </div>
         </div>
-        <form name= "jiushiwaner" method="post" action="PurchaseOrderDetails.php">
-          <label for="PO">Purchase Order Details:</label>
-          <input type="text" name="PO">
-          <input class="btn btn-primary" type="submit" value="Submit">
-        </form>
-        </div>
+        <button onclick="update()">Update</button>
 
       </div>
       <!-- /.container-fluid -->
 
     </div>
     <!-- End of Main Content -->
+
+    <!-- Footer -->
+    <footer class="sticky-footer bg-white">
+      <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+          <span>Copyright &copy; Your Website 2020</span>
+        </div>
+      </div>
+    </footer>
+    <!-- End of Footer -->
 
   </div>
   <!-- End of Content Wrapper -->
@@ -221,7 +214,32 @@
 
 <!-- Page level custom scripts -->
 <script src="js/demo/datatables-demo.js"></script>
+<script>
+  function update(){
 
+    partPrice = document.getElementById("partPrice").value;
+    partQty = document.getElementById("partQty").value;
+    partDesc = document.getElementById("partDesc").value;
+    var parameters = "{\"id\":" + partNumber + ",\"desc\":\"" + partDesc + "\",\"price\":" + partPrice + ",\"qty\":" + partQty + "}";
+
+    fetch('https://web.cs.dal.ca/~zhaohe/CompanyAgentService/PartsG11', {
+      method: "PUT",
+      body: parameters,
+      headers: {"Content-type": "application/json"}
+    })
+            .then(response => response.json())
+            .then(function(json){
+              if(JSON.parse(json).Rows > 0) {
+                alert("Part Information Updated!");
+                location.replace("CompanyAgent.php");
+              }
+              else {
+                alert("Updated Failed!");
+              }
+            })
+            .catch(err => console.log(err));
+  }
+</script>
 </body>
 
 </html>

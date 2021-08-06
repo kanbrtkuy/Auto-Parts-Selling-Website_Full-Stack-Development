@@ -85,6 +85,9 @@
     }
     else if (data2[0].Status == "confirmed") {
       status = "filled";
+      document.getElementById("cfmBtn").style.display = "none";
+      document.getElementById("cncBtn").style.display = "none";
+      
     }
     let tab2= `<tr>
       <td>${data2[0]["PO Number"]}</td>
@@ -109,6 +112,11 @@
       <td>${r["Unit Price"]}</td>
       <td>${r.Stock}</td>
       </tr>`;
+      if(r.Quantity > r.Stock){
+        document.getElementById("cfmBtn").style.display = "none";
+        document.getElementById("cncBtn").style.display = "none";
+        document.getElementById("wrnBtn").style.display = "";
+      }
     }
     // Setting innerHTML as tab variable
     document.getElementById("ourTable").innerHTML = tab;
@@ -242,7 +250,9 @@
         </div>
 
 
-        <button onclick="confirm()">Confirm</button>
+        <button class="btn btn-primary" onclick="confirm()" id="cfmBtn">Confirm</button>
+        <a class="btn btn-danger" href="CompanyAgent.php" id="cncBtn">Cancel</a>
+        <button class="btn btn-warning" onclick="warn()" id="wrnBtn" style="display: none;">Cannot Fulfill</a>
 
       </div>
       <!-- /.container-fluid -->
@@ -322,13 +332,18 @@
             .then(function(json){
               if(JSON.parse(json).Rows > 0) {
                 alert("Confirmed!");
-                location.reload();
+                location.replace("CompanyAgent.php");
               }
               else {
                 alert("Confirm Failed!");
               }
             })
             .catch(err => console.log(err));
+  }
+
+  function warn(){
+    alert("Can not fulfill this order: Inadequate Stock");
+    location.replace("CompanyAgent.php");
   }
 </script>
 </body>
